@@ -8,6 +8,7 @@ public class Car {
 	private int year;
 	private String status; //Registered, Being Washed, Towed, Parked
 	private int timer; // hour
+	private String location;
 	
 	public Car() {
 		brand = "noBrand";
@@ -15,7 +16,7 @@ public class Car {
 		plate = "noPlate";
 		year = 0;
 		status = "noStatus";
-		
+		location = "";
 	}
 	
 	public Car(String brand, String model, String plate, int year) {
@@ -25,8 +26,18 @@ public class Car {
 		this.year = year;
 		this.status = "Registered";
 		this.timer = 0;
+		location = "";
 	}
 	
+	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	public String getPlate() {
 		return plate;
 	}

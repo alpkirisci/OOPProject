@@ -1,5 +1,6 @@
 package MainAndSys;
 
+import HasA.Car;
 import HasA.Location;
 import Inheritance.User;
 
@@ -48,8 +49,15 @@ public class SysAutoPark {
 		return temp;
 	}
 	
-	public static void parkCar() {
-		
+	public static void parkCar(Car car) {
+		Location cur;
+		for (String loc:locations.keySet()) {
+			cur = locations.get(loc); 
+			if (cur.getReserved() == false && cur.getPlate().isBlank()) {
+				cur.setPlate(car.getPlate());
+				car.setLocation(loc);
+			}
+		}
 	}
 	
 	public static void takeCar() {
