@@ -1,10 +1,7 @@
-// testin github hello
-
 
 package HasA;
 
 public class Car {
-	private String githubtest;
 	private String brand;
 	private String model;
 	private String plate;
