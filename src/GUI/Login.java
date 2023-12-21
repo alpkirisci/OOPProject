@@ -1,19 +1,23 @@
 package GUI;
 import java.awt.EventQueue;
 
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.Timer;
 
 import Inheritance.User;
-import GUI.MainFrame;
+import GUI.StandardFrame;
 import GUI.AddFrame;
+import MainAndSys.Main;
 import MainAndSys.SysAutoPark;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
@@ -24,8 +28,15 @@ public class Login extends JFrame {
 	private JTextField textField_1;
 	private JLabel lblFeed;
 
-	MainFrame mainF;
+	StandardFrame mainF;
+	
+	
 	AddFrame addF = new AddFrame(this);
+	
+	
+
+	
+	
 	
 	public JLabel getLblFeed() {
 		return lblFeed;
@@ -35,6 +46,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+
 		setTitle("Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 266);
@@ -83,7 +95,7 @@ public class Login extends JFrame {
 					if (user == null)
 						lblFeed.setText("Wrong id or password");
 					else {
-						mainF = new MainFrame(user);
+						mainF = new StandardFrame(user);
 						mainF.setVisible(true);
 						setVisible(false);
 					}
@@ -108,7 +120,28 @@ public class Login extends JFrame {
 		lblWelcomeToCyberpark.setBounds(50, 12, 248, 15);
 		panel.add(lblWelcomeToCyberpark);
 		
+		JLabel clock = new JLabel("");
+		clock.setBounds(337, 0, 70, 15);
+		panel.add(clock);
+		
+		
+		
+		ActionListener updateClockAction = new ActionListener() {
+			  public void actionPerformed(ActionEvent e) {
+			      // Assumes clock is a custom component
+			      // OR
+			      // Assumes clock is a JLabel
+				  String hour = String.format("%d", Main.time.getHour());
+				  String min = String.format("%d", Main.time.getMinute());
+
+				  if (hour.length() == 1)
+					  hour = "0" + hour;
+				  if (min.length() == 1)
+					  min = "0" + min;
+			      clock.setText(hour + ":"+ min); 
+			    }
+			};
+		Timer t = new Timer(1000, updateClockAction);
+		t.start();
 	}
-
-
 }

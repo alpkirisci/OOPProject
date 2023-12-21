@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 import Inheritance.User;
 
-public class MainFrame extends JFrame {
+public class StandardFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame(User user) {
+	public StandardFrame(User user) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

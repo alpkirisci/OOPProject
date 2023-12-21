@@ -8,14 +8,22 @@ public class Location {
 	private int floor;
 	private String plate;
 	private LocalDateTime parkTime;
+	private boolean reserved;
 	
 	public Location(int no, String section, int floor) {
 		super();
 		this.no = no;
 		this.section = section;
 		this.floor = floor;
+		this.reserved =  false;
 	}
 
+	public boolean getReserved() {
+		return reserved;
+	}
+	
+	
+	
 	public String getPlate() {
 		return plate;
 	}
