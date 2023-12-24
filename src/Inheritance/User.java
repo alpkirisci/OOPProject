@@ -11,13 +11,45 @@ public abstract class User implements UserInterface{
 	protected String name;
 	protected ArrayList<Car> carList;
 	protected int age;
-	protected int phoneNumber;
+	protected String phoneNumber;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public double getDuePayment() {
+		return duePayment;
+	}
+
+	public void setDuePayment(double duePayment) {
+		this.duePayment = duePayment;
+	}
+
 	protected String notification;
 	protected double duePayment;
 	protected boolean banned;
 	static protected int numberOfUsers = 1000;
 	
-	public User(String name, String password, int age, int phoneNumber){
+	public User(String name, String password, int age, String phoneNumber){
 		numberOfUsers++;
 		this.id = numberOfUsers;
 		this.password = password;

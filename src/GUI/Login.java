@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.Timer;
 
+import Inheritance.StandardUser;
 import Inheritance.User;
 import GUI.StandardFrame;
 import GUI.AddFrame;
@@ -28,7 +29,8 @@ public class Login extends JFrame {
 	private JTextField textField_1;
 	private JLabel lblFeed;
 
-	StandardFrame mainF;
+	StandardFrame stanF;
+	MembershipFrame memF;
 	
 	
 	AddFrame addF = new AddFrame(this);
@@ -95,8 +97,16 @@ public class Login extends JFrame {
 					if (user == null)
 						lblFeed.setText("Wrong id or password");
 					else {
-						mainF = new StandardFrame(user);
-						mainF.setVisible(true);
+						if (user instanceof StandardUser) {
+							stanF = new StandardFrame(user);
+							stanF.setVisible(true);
+
+						}
+						else {
+							memF = new MembershipFrame(user);
+							memF.setVisible(true);
+						}
+
 						setVisible(false);
 					}
 				}
@@ -121,7 +131,7 @@ public class Login extends JFrame {
 		panel.add(lblWelcomeToCyberpark);
 		
 		JLabel clock = new JLabel("");
-		clock.setBounds(337, 0, 70, 15);
+		clock.setBounds(337, 12, 70, 15);
 		panel.add(clock);
 		
 		
@@ -142,6 +152,7 @@ public class Login extends JFrame {
 			    }
 			};
 		Timer t = new Timer(1000, updateClockAction);
+		t.setInitialDelay(0);
 		t.start();
 	}
 }
