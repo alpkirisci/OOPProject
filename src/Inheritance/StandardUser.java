@@ -9,7 +9,7 @@ public class StandardUser extends User {
 //		
 //	}
 
-	public StandardUser(String name, String password, int age, int phoneNumber) {
+	public StandardUser(String name, String password, int age, String phoneNumber) {
 	super(name, password, age, phoneNumber);
 	}
 	

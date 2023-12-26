@@ -35,7 +35,7 @@ import javax.swing.border.LineBorder;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
-public class StandardFrame extends JFrame {
+public class MembershipFrame extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textId;
@@ -48,7 +48,7 @@ public class StandardFrame extends JFrame {
 	private JTextField textField;
 	private JTextArea textArea;
 	private AddCar addCarF;
-	private StandardFrame stanF = this;
+	private MembershipFrame memF = this;
 	private JComboBox comboBox;
 	
 	private void message(String mes) {
@@ -63,7 +63,7 @@ public class StandardFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public StandardFrame(User user, Login logF) {
+	public MembershipFrame(User user, Login logF) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 768, 500);
 		contentPane = new JPanel();
@@ -280,7 +280,7 @@ public class StandardFrame extends JFrame {
 		});
 		addBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addCarF = new AddCar(user, stanF);
+				addCarF = new AddCar(user, memF);
 				addCarF.setVisible(true);
 			}
 		});

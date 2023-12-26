@@ -8,7 +8,7 @@ public class MembershipUser extends User{
 	
 	
 
-	public MembershipUser(String name, String password, int age, int phoneNumber) {
+	public MembershipUser(String name, String password, int age, String phoneNumber) {
 		super(name, password, age, phoneNumber);
 	}
 

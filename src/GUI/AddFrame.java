@@ -115,7 +115,7 @@ public class AddFrame extends JFrame {
 					String name = textField_1.getText();
 					String password = textField_2.getText();
 					int age = Integer.parseInt(textField_3.getText());
-					int phoneNumber = Integer.parseInt(textField_4.getText());
+					String phoneNumber = textField_4.getText();
 					if (rdbtnMembershipUser.isSelected())
 						temp = new MembershipUser(name, password, age, phoneNumber);
 					else

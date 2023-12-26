@@ -47,7 +47,7 @@ public class Car {
 				"\nModel : " + model +
 				"\nPlate : " + plate +
 				"\nYear : " + year +
-				"\nStatus : " + status + "\n\n";
+				"\nStatus : " + status;
 	}
 
 	public String getStatus() {

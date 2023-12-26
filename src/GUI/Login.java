@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.Timer;
 
+import Inheritance.StandardUser;
 import Inheritance.User;
 import GUI.StandardFrame;
 import GUI.AddFrame;
@@ -28,8 +29,9 @@ public class Login extends JFrame {
 	private JTextField textField_1;
 	private JLabel lblFeed;
 
-	StandardFrame mainF;
-	
+	StandardFrame stanF;
+	MembershipFrame memF;
+	Login logF = this;
 	
 	AddFrame addF = new AddFrame(this);
 	
@@ -80,7 +82,7 @@ public class Login extends JFrame {
 		textField_1.setColumns(10);
 		
 		lblFeed = new JLabel("");
-		lblFeed.setBounds(50, 115, 317, 15);
+		lblFeed.setBounds(50, 121, 317, 15);
 		panel.add(lblFeed);
 		
 		JButton btnEnter = new JButton("Enter");
@@ -95,8 +97,16 @@ public class Login extends JFrame {
 					if (user == null)
 						lblFeed.setText("Wrong id or password");
 					else {
-						mainF = new StandardFrame(user);
-						mainF.setVisible(true);
+						if (user instanceof StandardUser) {
+							stanF = new StandardFrame(user, logF);
+							stanF.setVisible(true);
+
+						}
+						else {
+							memF = new MembershipFrame(user, logF);
+							memF.setVisible(true);
+						}
+
 						setVisible(false);
 					}
 				}
@@ -121,27 +131,43 @@ public class Login extends JFrame {
 		panel.add(lblWelcomeToCyberpark);
 		
 		JLabel clock = new JLabel("");
-		clock.setBounds(337, 0, 70, 15);
+		clock.setBounds(337, 12, 70, 15);
 		panel.add(clock);
 		
 		
+		ActionListener updateChecker = new ActionListener() {
+		  public void actionPerformed(ActionEvent e) {
+			  
+		    }
+		};
+		Timer checker = new Timer(1000*60*60, updateChecker);
+		checker.setInitialDelay(0);
+		checker.start();
+			 
+		
 		
 		ActionListener updateClockAction = new ActionListener() {
-			  public void actionPerformed(ActionEvent e) {
-			      // Assumes clock is a custom component
-			      // OR
-			      // Assumes clock is a JLabel
+			public void actionPerformed(ActionEvent e) {
+				  // Assumes clock is a custom component
+				  // OR
+				  // Assumes clock is a JLabel
 				  String hour = String.format("%d", Main.time.getHour());
 				  String min = String.format("%d", Main.time.getMinute());
-
+				
 				  if (hour.length() == 1)
 					  hour = "0" + hour;
 				  if (min.length() == 1)
 					  min = "0" + min;
-			      clock.setText(hour + ":"+ min); 
-			    }
-			};
-		Timer t = new Timer(1000, updateClockAction);
+				  clock.setText(hour + ":"+ min);
+				  if (stanF != null)
+					  StandardFrame.clock.setText("Time: " + hour + ":"+ min);
+				  if (memF != null)
+					  MembershipFrame.clock.setText(hour + ":"+ min);
+			}
+		};
+		
+		Timer t = new Timer(100, updateClockAction);
+		t.setInitialDelay(0);
 		t.start();
 	}
 }
