@@ -1,5 +1,6 @@
 package Inheritance;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import HasA.Car;
@@ -9,11 +10,19 @@ public abstract class User implements UserInterface{
 	protected int id;
 	protected String password;
 	protected String name;
-	protected ArrayList<Car> carList;
+	protected HashMap<String,Car> carList;
 	protected int age;
 	protected String phoneNumber;
 	public String getName() {
 		return name;
+	}
+	
+	public void removeCar(String plate) {
+		carList.remove(plate);
+	}
+	
+	public Car getCar(String plate) {
+		return carList.get(plate);
 	}
 
 	public void setName(String name) {
@@ -54,7 +63,7 @@ public abstract class User implements UserInterface{
 		this.id = numberOfUsers;
 		this.password = password;
 		this.name = name;
-		carList = new ArrayList<Car>();
+		carList = new HashMap<String,Car>();
 		this.age = age;
 		this.phoneNumber = phoneNumber;
 		this.duePayment = 0;
@@ -63,19 +72,23 @@ public abstract class User implements UserInterface{
 	}
 	
 	public void addCar(Car car) {
-		carList.add(car);
+		carList.put(car.getPlate(), car);
+	}
+	
+	public String displayCars() {
+		String cars = "";
+		int n = 1;
+		for (String i:carList.keySet()) {
+			cars += "Car " + n + ")\n" + carList.get(i).toString() + "\n";
+		}
+		return cars;
 	}
 	
 	
-	
 	public String toString() {
-		String cars = ""; 
-		for (Car i:carList)
-			cars += "Car " + (carList.indexOf(i) + 1) + ")\n" + i.toString() + "\n";
-		
 		return "Id : " + id +
 				"\nName : " + name +
-				"\nCars:\n" + cars +
+				"\nCars:\n" + displayCars() +
 				"\nAge : " + age +
 				"\nPhone Number : " + phoneNumber + "\n";
 	}
