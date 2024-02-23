@@ -2,8 +2,11 @@ package MainAndSys;
 
 import HasA.Car;
 import HasA.Location;
+import Inheritance.MembershipUser;
 import Inheritance.User;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SysAutoPark {
@@ -53,15 +56,46 @@ public class SysAutoPark {
 		Location cur;
 		for (String loc:locations.keySet()) {
 			cur = locations.get(loc); 
-			if (cur.getReserved() == false && cur.getPlate().isBlank()) {
+			if (cur.getReserved() == false && cur.getPlate()==null) {
 				cur.setPlate(car.getPlate());
+				car.setLocation(loc);
+				cur.setParkTime(Main.time);
+			}
+		}
+	}
+	
+	public static void parkCar(Car car, ArrayList<String> owned) {
+		Location cur;
+		for (String loc:owned) {
+			cur = locations.get(loc); 
+			if (cur.getPlate()==null) {
+				cur.setPlate(car.getPlate());
+				cur.setParkTime(Main.time);
 				car.setLocation(loc);
 			}
 		}
 	}
 	
-	public static void takeCar() {
-		
+
+	
+	public static int takeCar(Car car) {
+		Location cur = locations.get(car.getLocation());
+		car.setLocation("");
+		cur.setPlate(null);
+		LocalDateTime time = cur.getParkTime();
+		cur.setParkTime(null);
+		return Main.time.minusHours(time.getHour()).getHour();
+	}
+	
+	public static void reserveLocation(MembershipUser user) {
+		Location cur;
+		for (String loc:locations.keySet()) {
+			cur = locations.get(loc); 
+			if (cur.getReserved() == false && cur.getPlate()==null) {
+				cur.setReserved(true);
+				user.getOwnedParkingSpaces().add(loc);
+			}
+		}
 	}
 
 }

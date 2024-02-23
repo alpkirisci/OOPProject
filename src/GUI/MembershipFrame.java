@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Inheritance.MembershipUser;
+import Inheritance.StandardUser;
 import Inheritance.User;
 import MainAndSys.Main;
 import MainAndSys.SysAutoPark;
@@ -34,6 +36,9 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.LineBorder;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JRadioButton;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MembershipFrame extends JFrame {
 
@@ -50,6 +55,8 @@ public class MembershipFrame extends JFrame {
 	private AddCar addCarF;
 	private MembershipFrame memF = this;
 	private JComboBox comboBox;
+	private Car curCar;
+	private int curHour;
 	
 	private void message(String mes) {
 		textArea.setText("\n"+ mes + "\n\n***********************************************************************************\n" + textArea.getText());
@@ -63,7 +70,7 @@ public class MembershipFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MembershipFrame(User user, Login logF) {
+	public MembershipFrame(MembershipUser user, Login logF) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 768, 500);
 		contentPane = new JPanel();
@@ -123,7 +130,7 @@ public class MembershipFrame extends JFrame {
 		textDue.setColumns(10);
 		textDue.setBounds(167, 169, 146, 19);
 		contentPane.add(textDue);
-		textDue.setText(String.format("%.2f", user.getDuePayment()));
+		textDue.setText(String.format("%.2f", user.getBalance()));
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -135,41 +142,32 @@ public class MembershipFrame extends JFrame {
 		scrollPane.setViewportView(textArea);
 		
 		textField = new JTextField();
-		textField.setBounds(441, 65, 74, 19);
+		textField.setBounds(440, 69, 74, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblAmount = new JLabel("Amount:");
-		lblAmount.setBounds(369, 66, 70, 15);
+		lblAmount.setBounds(368, 70, 70, 15);
 		contentPane.add(lblAmount);
 		
 		
 		
-		JButton duePaymentBtn = new JButton("Pay");
-		duePaymentBtn.setBounds(369, 20, 146, 31);
+		JButton duePaymentBtn = new JButton("Add Balance");
+		duePaymentBtn.setBounds(368, 24, 146, 31);
 		duePaymentBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (textField.getText().isBlank())
 					message("Please enter an amount.");
-				else if (user.getDuePayment() < Double.parseDouble(textField.getText()))
-					message("You have tried to pay more than your due payment, please reduce the amount.");
+
 				else {
-					user.pay(Double.parseDouble(textField.getText()));
-					message("Your payment has been made from your registered card.\nThank you for your patronage.");
-					textDue.setText(String.format("%.2f", user.getDuePayment()));
+					user.addBalance(Double.parseDouble(textField.getText()));
+					message("Your balance has been added from your registered card.\nThank you for your patronage.");
+					textDue.setText(String.format("%.2f", user.getBalance()));
 				}
 				
 			}
 		});
 		contentPane.add(duePaymentBtn);
-		
-		JButton reportBtn = new JButton("Report Crash");
-		reportBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		reportBtn.setBounds(369, 169, 146, 31);
-		contentPane.add(reportBtn);
 		
 		JLabel lblName = new JLabel("Name:");
 		lblName.setBounds(32, 64, 117, 15);
@@ -179,7 +177,7 @@ public class MembershipFrame extends JFrame {
 		lblNewLabel.setBounds(32, 134, 117, 15);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lblDebt = new JLabel("Due Payment:");
+		JLabel lblDebt = new JLabel("Balance");
 		lblDebt.setBounds(34, 173, 115, 15);
 		contentPane.add(lblDebt);
 		
@@ -190,21 +188,6 @@ public class MembershipFrame extends JFrame {
 		JLabel lblId = new JLabel("ID:");
 		lblId.setBounds(32, 32, 117, 15);
 		contentPane.add(lblId);
-		
-
-		
-		JButton notificationBtn = new JButton("Notifications");
-		notificationBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (user.getNotification().isBlank())
-					message("You have no new notifications");
-				else
-					message(user.getNotification());
-
-			}
-		});
-		notificationBtn.setBounds(369, 120, 146, 31);
-		contentPane.add(notificationBtn);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -224,12 +207,12 @@ public class MembershipFrame extends JFrame {
 				Main.time = Main.time.plusHours(1);
 			}
 		});
-		timeBtn.setBounds(569, 39, 146, 31);
+		timeBtn.setBounds(560, 39, 146, 31);
 		contentPane.add(timeBtn);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.setBounds(357, 8, 172, 86);
+		panel_1.setBounds(356, 12, 172, 86);
 		contentPane.add(panel_1);
 		
 		JPanel panel_2 = new JPanel();
@@ -241,13 +224,37 @@ public class MembershipFrame extends JFrame {
 		comboBox = new JComboBox();
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				message(user.getCar((String)comboBox.getSelectedItem()).toString());
+				if (user.getCar((String)comboBox.getSelectedItem()) != null)
+					message(user.getCar((String)comboBox.getSelectedItem()).toString());
+				
 			}
 		});
 		comboBox.setBounds(25, 24, 148, 24);
 		panel_2.add(comboBox);
 		
 		JButton parkBtn = new JButton("Park/Take Car");
+		parkBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				curCar = user.getCar((String)comboBox.getSelectedItem());
+				if (curCar != null) {
+					if (curCar.getLocation().isBlank()) {
+						SysAutoPark.parkCar(curCar);
+						curCar.setStatus("Parked at " + curCar.getLocation());
+						message(curCar.getStatus());
+					}
+					
+					else {
+						curHour = SysAutoPark.takeCar(curCar);
+						user.reduceBalance(user.calculatePrice(curHour));
+						curCar.setStatus("Registered");
+						textDue.setText(String.format("%.2f", user.getBalance()));
+						message("You have taken your car.");
+					}
+				}
+				else
+					message("Please add a car.");
+			}
+		});
 		parkBtn.setBounds(25, 71, 148, 36);
 		panel_2.add(parkBtn);
 		
@@ -272,6 +279,35 @@ public class MembershipFrame extends JFrame {
 		JButton returnBtn = new JButton("Return");
 		returnBtn.setBounds(25, 307, 148, 36);
 		panel_2.add(returnBtn);
+		
+		JRadioButton rdbtnUseValet = new JRadioButton("Use Valet");
+		rdbtnUseValet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(rdbtnUseValet.isSelected()) {
+					user.setUseValet(true);
+					message("You are going to use a valet.");
+				}
+				else {
+					user.setUseValet(false);
+					message("You are no longer going to use a valet.");
+				}
+				
+			}
+		});
+		rdbtnUseValet.setBounds(365, 106, 149, 23);
+		contentPane.add(rdbtnUseValet);
+		
+		JButton btnReserveALocation = new JButton("Buy Location");
+		btnReserveALocation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				user.buyParkingSpace();
+				textDue.setText(String.format("%.2f", user.getBalance()));
+				message("You have bought a parking space.");
+			}
+		});
+
+		btnReserveALocation.setBounds(360, 151, 154, 61);
+		contentPane.add(btnReserveALocation);
 		returnBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				logF.setVisible(true);
@@ -286,6 +322,11 @@ public class MembershipFrame extends JFrame {
 		});
 		washBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (user.getCar((String)comboBox.getSelectedItem()) != null) {
+					user.washCar();
+					message("Your car has been washed.");
+					textDue.setText(String.format("%.2f", user.getBalance()));
+				}
 			}
 		});
 		

@@ -22,7 +22,9 @@ public class Location {
 		return reserved;
 	}
 	
-	
+	public void setReserved(boolean reserved) {
+		this.reserved = reserved;
+	}
 	
 	public String getPlate() {
 		return plate;

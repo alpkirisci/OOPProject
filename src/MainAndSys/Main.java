@@ -13,6 +13,7 @@ public class Main {
 
 
 	public static void main(String[] args) {
+		SysAutoPark.createLocations();
 		time = LocalDateTime.now();
 		Login login = new Login();
 		login.setVisible(true);
