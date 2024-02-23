@@ -110,7 +110,7 @@ public class AddCar extends JFrame {
 					}
 					else if (obj instanceof MembershipFrame) {
 						memF = (MembershipFrame) obj;
-						stanF.fillBox(temp);
+						memF.fillBox(temp);
 					}
 					
 					

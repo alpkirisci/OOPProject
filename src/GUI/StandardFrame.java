@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Inheritance.StandardUser;
 import Inheritance.User;
 import MainAndSys.Main;
 import MainAndSys.SysAutoPark;
@@ -50,6 +51,8 @@ public class StandardFrame extends JFrame {
 	private AddCar addCarF;
 	private StandardFrame stanF = this;
 	private JComboBox comboBox;
+	private Car curCar;
+	private int curHour;
 	
 	private void message(String mes) {
 		textArea.setText("\n"+ mes + "\n\n***********************************************************************************\n" + textArea.getText());
@@ -63,7 +66,7 @@ public class StandardFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public StandardFrame(User user, Login logF) {
+	public StandardFrame(StandardUser user, Login logF) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 768, 500);
 		contentPane = new JPanel();
@@ -135,18 +138,18 @@ public class StandardFrame extends JFrame {
 		scrollPane.setViewportView(textArea);
 		
 		textField = new JTextField();
-		textField.setBounds(441, 65, 74, 19);
+		textField.setBounds(440, 145, 74, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JLabel lblAmount = new JLabel("Amount:");
-		lblAmount.setBounds(369, 66, 70, 15);
+		lblAmount.setBounds(368, 146, 70, 15);
 		contentPane.add(lblAmount);
 		
 		
 		
 		JButton duePaymentBtn = new JButton("Pay");
-		duePaymentBtn.setBounds(369, 20, 146, 31);
+		duePaymentBtn.setBounds(368, 100, 146, 31);
 		duePaymentBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (textField.getText().isBlank())
@@ -162,14 +165,6 @@ public class StandardFrame extends JFrame {
 			}
 		});
 		contentPane.add(duePaymentBtn);
-		
-		JButton reportBtn = new JButton("Report Crash");
-		reportBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		reportBtn.setBounds(369, 169, 146, 31);
-		contentPane.add(reportBtn);
 		
 		JLabel lblName = new JLabel("Name:");
 		lblName.setBounds(32, 64, 117, 15);
@@ -191,21 +186,6 @@ public class StandardFrame extends JFrame {
 		lblId.setBounds(32, 32, 117, 15);
 		contentPane.add(lblId);
 		
-
-		
-		JButton notificationBtn = new JButton("Notifications");
-		notificationBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (user.getNotification().isBlank())
-					message("You have no new notifications");
-				else
-					message(user.getNotification());
-
-			}
-		});
-		notificationBtn.setBounds(369, 120, 146, 31);
-		contentPane.add(notificationBtn);
-		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "Information", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(22, 0, 310, 214);
@@ -224,12 +204,12 @@ public class StandardFrame extends JFrame {
 				Main.time = Main.time.plusHours(1);
 			}
 		});
-		timeBtn.setBounds(569, 39, 146, 31);
+		timeBtn.setBounds(394, 4, 146, 31);
 		contentPane.add(timeBtn);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_1.setBounds(357, 8, 172, 86);
+		panel_1.setBounds(356, 88, 172, 86);
 		contentPane.add(panel_1);
 		
 		JPanel panel_2 = new JPanel();
@@ -241,13 +221,37 @@ public class StandardFrame extends JFrame {
 		comboBox = new JComboBox();
 		comboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				message(user.getCar((String)comboBox.getSelectedItem()).toString());
+				if (user.getCar((String)comboBox.getSelectedItem()) != null)
+					message(user.getCar((String)comboBox.getSelectedItem()).toString());
+				
 			}
 		});
 		comboBox.setBounds(25, 24, 148, 24);
 		panel_2.add(comboBox);
 		
 		JButton parkBtn = new JButton("Park/Take Car");
+		parkBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				curCar = user.getCar((String)comboBox.getSelectedItem());
+				if (curCar != null) {
+					if (curCar.getLocation().isBlank()) {
+						SysAutoPark.parkCar(curCar);
+						curCar.setStatus("Parked at " + curCar.getLocation());
+						message(curCar.getStatus());
+					}
+					
+					else {
+						curHour = SysAutoPark.takeCar(curCar);
+						user.addDuePayment(user.calculatePrice(curHour));
+						curCar.setStatus("Registered");
+						textDue.setText(String.format("%.2f", user.getDuePayment()));
+						message("You have taken your car.");
+					}
+				}
+				else
+					message("Please add a car.");
+			}
+		});
 		parkBtn.setBounds(25, 71, 148, 36);
 		panel_2.add(parkBtn);
 		
@@ -286,6 +290,10 @@ public class StandardFrame extends JFrame {
 		});
 		washBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (user.getCar((String)comboBox.getSelectedItem()) != null) {
+					user.washCar();
+					message("Your car has been washed.");
+				}
 			}
 		});
 		

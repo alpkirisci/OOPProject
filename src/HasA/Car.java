@@ -7,7 +7,6 @@ public class Car {
 	private String plate;
 	private int year;
 	private String status; //Registered, Being Washed, Towed, Parked
-	private int timer; // hour
 	private String location;
 	
 	public Car() {
@@ -25,7 +24,6 @@ public class Car {
 		this.plate = plate;
 		this.year = year;
 		this.status = "Registered";
-		this.timer = 0;
 		location = "";
 	}
 	
@@ -58,13 +56,6 @@ public class Car {
 		this.status = status;
 	}
 
-	public int getTimer() {
-		return timer;
-	}
-
-	public void setTimer(int timer) {
-		this.timer = timer;
-	}
 	
 
 }

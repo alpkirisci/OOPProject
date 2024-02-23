@@ -1,8 +1,9 @@
 package Inheritance;
 
+import HasA.Car;
+
 public class StandardUser extends User {
 	private double duePayment;
-	private String lastLogin;
 	private double totalPayment = 0;
 	
 //	public upgradeToMembership() {
@@ -14,12 +15,20 @@ public class StandardUser extends User {
 	}
 	
 	@Override
-	public double calculatePrice(double price, int hours) {
-		
-		return price * hours;
+	public double calculatePrice(int hours) {
+		double price = 30;
+		return price + 15 * hours;
 	}
 
 
+
+	public double getDuePayment() {
+		return duePayment;
+	}
+	
+	public void addDuePayment(double add) {
+		duePayment += add;
+	}
 
 	@Override
 	public void pay(double payment) {
@@ -27,9 +36,9 @@ public class StandardUser extends User {
 		
 	}
 
-	@Override
-	public void banCondition() {
-		if(duePayment < -200)
-			super.banned = true;
+	public void washCar() {
+		duePayment += (double)50;
+
+
 	}
 }

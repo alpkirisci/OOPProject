@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.Timer;
 
+import Inheritance.MembershipUser;
 import Inheritance.StandardUser;
 import Inheritance.User;
 import GUI.StandardFrame;
@@ -98,12 +99,12 @@ public class Login extends JFrame {
 						lblFeed.setText("Wrong id or password");
 					else {
 						if (user instanceof StandardUser) {
-							stanF = new StandardFrame(user, logF);
+							stanF = new StandardFrame(((StandardUser)user), logF);
 							stanF.setVisible(true);
 
 						}
 						else {
-							memF = new MembershipFrame(user, logF);
+							memF = new MembershipFrame(((MembershipUser)user), logF);
 							memF.setVisible(true);
 						}
 
